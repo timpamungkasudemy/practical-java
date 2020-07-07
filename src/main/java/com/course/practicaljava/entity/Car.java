@@ -3,6 +3,14 @@ package com.course.practicaljava.entity;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
+
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Car {
 
 	private boolean available;
@@ -11,14 +19,20 @@ public class Car {
 
 	private String color;
 
+	@JsonFormat(pattern = "dd-MMM-yyyy", timezone = "Asia/Jakarta")
 	private LocalDate firstReleaseDate;
 
 	private int price;
 
 	private String type;
 
+	@JsonInclude(value = Include.NON_EMPTY)
 	private List<String> additionalFeatures;
 
+	@JsonInclude(value = Include.NON_EMPTY)
+	private String secretFeature;
+
+	@JsonUnwrapped
 	private Engine engine;
 
 	private List<Tire> tires;
@@ -108,8 +122,18 @@ public class Car {
 
 	@Override
 	public String toString() {
-		return "Car [brand=" + brand + ", color=" + color + ", type=" + type + ", price=" + price + ", available="
-				+ available + ", firstReleaseDate=" + firstReleaseDate + "]";
+		return "Car [available=" + available + ", brand=" + brand + ", color=" + color + ", firstReleaseDate="
+				+ firstReleaseDate + ", price=" + price + ", type=" + type + ", additionalFeatures="
+				+ additionalFeatures + ", secretFeature=" + secretFeature + ", engine=" + engine + ", tires=" + tires
+				+ "]";
+	}
+
+	public String getSecretFeature() {
+		return secretFeature;
+	}
+
+	public void setSecretFeature(String secretFeature) {
+		this.secretFeature = secretFeature;
 	}
 
 }

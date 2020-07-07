@@ -20,7 +20,7 @@ configurations {
 }
 
 ext {
-	set('apacheCommonsLang3Version', "3.9")
+	set('apacheCommonsLang3Version', "3.10")
 }
 
 dependencies {

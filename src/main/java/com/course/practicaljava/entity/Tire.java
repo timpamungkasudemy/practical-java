@@ -1,11 +1,16 @@
 package com.course.practicaljava.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Tire {
 
 	private String manufacturer;
 
+	@JsonProperty(value = "diameter")
 	private int size;
 
+	@JsonIgnore
 	private int price;
 
 	public Tire() {
