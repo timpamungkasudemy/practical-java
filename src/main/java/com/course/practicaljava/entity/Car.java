@@ -3,6 +3,12 @@ package com.course.practicaljava.entity;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -10,8 +16,12 @@ import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
+@Document(indexName = "practical-java")
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class Car {
+
+	@Id
+	private String id;
 
 	private boolean available;
 
@@ -19,7 +29,8 @@ public class Car {
 
 	private String color;
 
-	@JsonFormat(pattern = "dd-MMM-yyyy", timezone = "Asia/Jakarta")
+	@Field(type = FieldType.Date, format = DateFormat.date)
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Jakarta")
 	private LocalDate firstReleaseDate;
 
 	private int price;
@@ -68,8 +79,16 @@ public class Car {
 		return firstReleaseDate;
 	}
 
+	public String getId() {
+		return id;
+	}
+
 	public int getPrice() {
 		return price;
+	}
+
+	public String getSecretFeature() {
+		return secretFeature;
 	}
 
 	public List<Tire> getTires() {
@@ -108,8 +127,16 @@ public class Car {
 		this.firstReleaseDate = firstReleaseDate;
 	}
 
+	public void setId(String id) {
+		this.id = id;
+	}
+
 	public void setPrice(int price) {
 		this.price = price;
+	}
+
+	public void setSecretFeature(String secretFeature) {
+		this.secretFeature = secretFeature;
 	}
 
 	public void setTires(List<Tire> tires) {
@@ -126,14 +153,6 @@ public class Car {
 				+ firstReleaseDate + ", price=" + price + ", type=" + type + ", additionalFeatures="
 				+ additionalFeatures + ", secretFeature=" + secretFeature + ", engine=" + engine + ", tires=" + tires
 				+ "]";
-	}
-
-	public String getSecretFeature() {
-		return secretFeature;
-	}
-
-	public void setSecretFeature(String secretFeature) {
-		this.secretFeature = secretFeature;
 	}
 
 }
