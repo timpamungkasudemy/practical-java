@@ -9,12 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.course.practicaljava.entity.Car;
+import com.course.practicaljava.repository.CarElasticRepository;
 import com.course.practicaljava.service.CarService;
 
 @RequestMapping(value = "/api/car/v1")
@@ -22,6 +26,9 @@ import com.course.practicaljava.service.CarService;
 public class CarApi {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CarApi.class);
+
+	@Autowired
+	private CarElasticRepository carRepository;
 
 	@Autowired
 	private CarService carService;
@@ -47,6 +54,46 @@ public class CarApi {
 		}
 
 		return result;
+	}
+
+	@GetMapping(value = "/count")
+	public String countCar() {
+		return "There are : " + carRepository.count() + " cars";
+	}
+
+	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public String saveCar(@RequestBody Car car) {
+		var id = carRepository.save(car).getId();
+
+		return "Saved with ID : " + id;
+	}
+
+	@GetMapping(value = "/{id}")
+	public Car getCar(@PathVariable("id") String carId) {
+		return carRepository.findById(carId).orElse(null);
+	}
+
+	@PutMapping(value = "/{id}")
+	public String updateCar(@PathVariable("id") String carId, @RequestBody Car updatedCar) {
+		updatedCar.setId(carId);
+		var newCar = carRepository.save(updatedCar);
+
+		return "Updated car with ID : " + newCar.getId();
+	}
+
+	@GetMapping(value = "/find-json", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Car> findCarsByBrandAndColor(@RequestBody Car car) {
+		return carRepository.findByBrandAndColor(car.getBrand(), car.getColor());
+	}
+
+	@GetMapping(value = "/cars/{brand}/{color}")
+	public List<Car> findCarsByPath(@PathVariable String brand, @PathVariable String color) {
+		return carRepository.findByBrandAndColor(brand, color);
+	}
+
+	@GetMapping(value = "/cars")
+	public List<Car> findCarsByParam(@RequestParam String brand, @RequestParam String color) {
+		return carRepository.findByBrandAndColor(brand, color);
 	}
 
 }
