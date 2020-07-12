@@ -1,5 +1,6 @@
 package com.course.practicaljava.repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
@@ -11,5 +12,7 @@ import com.course.practicaljava.entity.Car;
 public interface CarElasticRepository extends ElasticsearchRepository<Car, String> {
 
 	public List<Car> findByBrandAndColor(String brand, String color);
+
+	public List<Car> findByFirstReleaseDateAfter(LocalDate date);
 
 }

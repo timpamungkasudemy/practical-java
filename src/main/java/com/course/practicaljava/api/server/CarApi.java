@@ -1,5 +1,6 @@
 package com.course.practicaljava.api.server;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -7,6 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -94,6 +96,12 @@ public class CarApi {
 	@GetMapping(value = "/cars")
 	public List<Car> findCarsByParam(@RequestParam String brand, @RequestParam String color) {
 		return carRepository.findByBrandAndColor(brand, color);
+	}
+
+	@GetMapping(value = "/cars/date")
+	public List<Car> findCarsReleasedAfter(
+			@RequestParam(name = "first_release_date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate firstReleaseDate) {
+		return carRepository.findByFirstReleaseDateAfter(firstReleaseDate);
 	}
 
 }
