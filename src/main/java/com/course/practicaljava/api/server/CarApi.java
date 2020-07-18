@@ -151,14 +151,4 @@ public class CarApi {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 	}
 
-	@ExceptionHandler(value = IllegalApiParamException.class)
-	private ResponseEntity<ErrorResponse> handleIllegalApiParamException(IllegalApiParamException e) {
-		var message = "Exception API Param, " + e.getMessage();
-		LOG.warn(message);
-
-		var errorResponse = new ErrorResponse(message, LocalDateTime.now());
-
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-	}
-
 }
