@@ -11,13 +11,18 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping(value = "/api")
+@Tag(name = "Default Rest API", description = "Documentation for Default Rest API")
 public class DefaultRestApi {
 
 	private Logger LOG = LoggerFactory.getLogger(DefaultRestApi.class);
 
 	@GetMapping(value = "/welcome")
+	@Operation(summary = "Welcome", description = "Description for welcome API")
 	public String welcome() {
 		LOG.info(StringUtils.join("Hello", " this is", " Spring boot", " REST API"));
 		return "Welcome to Spring Boot";

@@ -34,8 +34,15 @@ import com.course.practicaljava.exception.IllegalApiParamException;
 import com.course.practicaljava.repository.CarElasticRepository;
 import com.course.practicaljava.service.CarService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RequestMapping(value = "/api/car/v1")
 @RestController
+@Tag(name = "Car API", description = "Documentation for Car API")
 public class CarApi {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CarApi.class);
@@ -51,8 +58,10 @@ public class CarApi {
 		return carService.generateCar();
 	}
 
+	@Operation(summary = "Echo car", description = "Echo given car input")
 	@PostMapping(value = "/echo", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public String echo(@RequestBody Car car) {
+	public String echo(
+			@io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Car to be echoed") @RequestBody Car car) {
 		LOG.info("Car is {}", car);
 
 		return car.toString();
@@ -102,8 +111,14 @@ public class CarApi {
 	}
 
 	@GetMapping(value = "/cars/{brand}/{color}")
-	public ResponseEntity<Object> findCarsByPath(@PathVariable String brand, @PathVariable String color,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+	@Operation(summary = "Find cars by path", description = "Find cars by path variable")
+	@ApiResponses({ @ApiResponse(responseCode = "200", description = "Everything is OK"),
+			@ApiResponse(responseCode = "400", description = "Bad input parameter") })
+	public ResponseEntity<Object> findCarsByPath(
+			@Parameter(description = "Brand to be find") @PathVariable String brand,
+			@Parameter(description = "Color to be find", example = "white") @PathVariable String color,
+			@Parameter(description = "Page number (for pagination)") @RequestParam(defaultValue = "0") int page,
+			@Parameter(description = "Number of items per page (for pagination)") @RequestParam(defaultValue = "10") int size) {
 		var headers = new HttpHeaders();
 		headers.add(HttpHeaders.SERVER, "Spring");
 		headers.add("X-Custom-Header", "Custom Response Header");
