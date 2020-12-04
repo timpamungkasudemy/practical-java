@@ -12,6 +12,8 @@ public interface CarService {
 
 	List<String> TYPES = List.of("Sedan", "SUV", "MPV");
 
+	List<String> ADDITIONAL_FEATURES = List.of("GPS", "Alarm", "Sunroof", "Media player", "Leather seats");
+
 	Car generateCar();
 
 }
